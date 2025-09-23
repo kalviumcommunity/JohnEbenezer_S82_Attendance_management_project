@@ -1,22 +1,33 @@
 package com.school;
 
+public abstract class Person implements Storable {
+    private int id;
+    private String name;
 
-public class Person {
-    static private int nextIdCounter = 0;
-    protected int id;
-    protected String name;
-
-    public Person(String name) {
-        id = nextIdCounter++;    
+    // Constructor with id + name
+    public Person(int id, String name) {
+        this.id = id;
         this.name = name;
     }
-    public int getId(){
+
+    // Constructor with only name (auto-generate id)
+    public Person(String name) {
+        this.id = new java.util.Random().nextInt(1000);
+        this.name = name;
+    }
+
+    public int getId() {
         return id;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
-    public void displayDetails(){
-        System.out.println("Id: "+getId()+" Name: "+getName());
+
+    public abstract void displayDetails();
+
+    @Override
+    public String toFileString() {
+        return id + "," + name;
     }
 }
