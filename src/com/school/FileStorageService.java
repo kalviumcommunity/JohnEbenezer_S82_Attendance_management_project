@@ -9,7 +9,7 @@ public class FileStorageService {
     public void saveData(List<? extends Storable> items, String filename) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
             for (Storable item : items) {
-                writer.println(item.toDataString());
+                writer.println(item.toFileString());  // ✅ corrected method
             }
         } catch (IOException e) {
             System.err.println("Error saving data to " + filename + ": " + e.getMessage());

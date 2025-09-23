@@ -1,17 +1,21 @@
 package com.school;
 
 public class Staff extends Person {
-    public String role;
+    private String role;
 
-    public Staff(String name,String role) {
+    public Staff(String name, String role) {
         super(name);
         this.role = role;
     }
-    
+
     @Override
-    public void displayDetails(){
-        super.displayDetails();
-        System.err.println("Role : " + role);
+    public void displayDetails() {
+        System.out.println("Staff ID: " + getId() + ", Name: " + getName() +
+                           ", Role: " + role);
     }
-     
+
+    @Override
+    public String toFileString() {
+        return getId() + "," + getName() + "," + role + ",Staff";
+    }
 }

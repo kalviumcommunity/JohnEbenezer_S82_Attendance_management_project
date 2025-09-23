@@ -1,61 +1,55 @@
-package  com.school;
+package com.school;
 import java.util.*;
 
 public class Main {
 
-    public static void displaySchoolDirectory(List<Person> people){
+    public static void displaySchoolDirectory(List<Person> people) {
         System.out.println("School Directory:");
-        for(Person p:people){
+        for (Person p : people) {
             p.displayDetails();
         }
     }
+
     public static void main(String[] args) {
-
-        List<Person> schoolPeople = new ArrayList<>();
-        
-            schoolPeople.add(new Student("Ram","A"));
-            schoolPeople.add(new Student("Sita","B"));
-            schoolPeople.add(new Student("Lakshman","B"));
-            schoolPeople.add(new Student("Hanuman","F"));
-        
-
-        ArrayList<Course> courses = new ArrayList<>();
-         
-            courses.add(new Course("Full Stack Developer"));
-            courses.add(new Course("Data Science"));
-            courses.add(new Course("Cloud Computing"));
-            courses.add(new Course("Blockchain Development"));
-        
+        // --- Create Students ---
         List<Student> students = new ArrayList<>();
+        students.add(new Student(1, "Ram", 10));
+        students.add(new Student(2, "Sita", 11));
+        students.add(new Student(3, "Lakshman", 12));
+        students.add(new Student(4, "Hanuman", 9));
 
-        for(Person p:schoolPeople){
-            if(p instanceof Student){
-                students.add((Student) p);
-            }
-        }
+        // --- Add to school directory (Person list) ---
+        List<Person> schoolPeople = new ArrayList<>(students);
         displaySchoolDirectory(schoolPeople);
-        ArrayList<AttendanceRecord> attendanceLog = new ArrayList<>();
 
-        for(int i =0;i<4;i++){
-            String pres = i%2==0?"Present":"Absent";
-            if(i == 3){
-                pres = "aa";
-            }
-            attendanceLog.add(new AttendanceRecord(schoolPeople.get(i).getId(),courses.get(i).getCourseId(),pres));
-        }
-        System.out.println("");
+        // --- Create Courses ---
+        List<Course> courses = new ArrayList<>();
+        courses.add(new Course(101, "Full Stack Developer"));
+        courses.add(new Course(102, "Data Science"));
+        courses.add(new Course(103, "Cloud Computing"));
+        courses.add(new Course(104, "Blockchain Development"));
 
-        System.out.println("Attendance Records:");
-        System.out.println("");
-
-        for(AttendanceRecord a:attendanceLog){
-            a.displayRecord();
-        }
-
+        // --- Create Services ---
         FileStorageService storage = new FileStorageService();
-        
+        AttendanceService attendanceService = new AttendanceService(storage);
+
+        // --- Mark Attendance using both overloads ---
+        attendanceService.markAttendance(students.get(0), courses.get(0), "Present");
+        attendanceService.markAttendance(students.get(1), courses.get(1), "Absent");
+
+        attendanceService.markAttendance(3, 103, "Present", students, courses);
+        attendanceService.markAttendance(4, 104, "Late", students, courses);
+
+        // --- Display Logs ---
+        attendanceService.displayAttendanceLog();
+        attendanceService.displayAttendanceLog(students.get(0));
+        attendanceService.displayAttendanceLog(courses.get(1));
+
+        // --- Save Data ---
         storage.saveData(students, "students.txt");
         storage.saveData(courses, "courses.txt");
-        storage.saveData(attendanceLog, "attendance_log.txt");
+        attendanceService.saveAttendanceData();
+
+        System.out.println("\nData saved successfully!");
     }
 }
