@@ -1,4 +1,2 @@
 101,Full Stack Developer
 102,Data Science
-103,Cloud Computing
-104,Blockchain Development
