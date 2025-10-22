@@ -13,7 +13,7 @@ public class RegistrationService {
         this.storageService = storageService;
     }
 
-    // Registration methods
+    // Register entities
     public Student registerStudent(int id, String name, int gradeLevel) {
         Student s = new Student(id, name, gradeLevel);
         students.add(s);
@@ -32,10 +32,22 @@ public class RegistrationService {
         return st;
     }
 
-    public Course createCourse(int id, String name) {
-        Course c = new Course(id, name);
+    // Updated to include capacity
+    public Course createCourse(int id, String name, int capacity) {
+        Course c = new Course(id, name, capacity);
         courses.add(c);
         return c;
+    }
+
+    public boolean enrollStudentInCourse(Student student, Course course) {
+        boolean success = course.addStudent(student);
+        if (success) {
+            System.out.println(student.getName() + " successfully enrolled in " + course.getCourseName());
+        } else {
+            System.out.println("Enrollment failed for " + student.getName() +
+                    " - Course " + course.getCourseName() + " is at full capacity (" + course.getCapacity() + ").");
+        }
+        return success;
     }
 
     // Accessors
@@ -57,7 +69,6 @@ public class RegistrationService {
         return null;
     }
 
-    // Combined people list
     public List<Person> getAllPeople() {
         List<Person> all = new ArrayList<>();
         all.addAll(students);
@@ -66,7 +77,6 @@ public class RegistrationService {
         return all;
     }
 
-    // Save all data
     public void saveAllRegistrations() {
         storageService.saveData(students, "students.txt");
         storageService.saveData(teachers, "teachers.txt");
